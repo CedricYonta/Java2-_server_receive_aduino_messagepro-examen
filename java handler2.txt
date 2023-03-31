@@ -1,0 +1,44 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Properties;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class DatabaseServlet extends HttpServlet {
+
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    // Paramètres de connexion à la base de données
+    String url = "jdbc:postgresql://localhost:5432/mydatabase";
+    Properties props = new Properties();
+    props.setProperty("user", "myuser");
+    props.setProperty("password", "mypassword");
+
+    try (Connection conn = DriverManager.getConnection(url, props)) {
+      // Exécution de la requête SQL pour récupérer les données
+      Statement stmt = conn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM mytable");
+
+      // Génération de la page HTML à partir des données récupérées
+      response.setContentType("text/html");
+      PrintWriter out = response.getWriter();
+      out.println("<html><head><title>My Web App</title></head><body>");
+      out.println("<h1>My Data</h1>");
+      out.println("<table>");
+      while (rs.next()) {
+        out.println("<tr><td>" + rs.getString("column1") + "</td><td>" + rs.getString("column2") + "</td></tr>");
+      }
+      out.println("</table></body></html>");
+    } catch (Exception e) {
+      throw new ServletException("Error processing database request", e);
+    }
+  }
+
+}

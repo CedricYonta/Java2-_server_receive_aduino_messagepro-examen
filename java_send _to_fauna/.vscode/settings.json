@@ -1,0 +1,10 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\yonta\\Downloads\\jar_files (1)\\faunadb-java-4.1.0.jar",
+        "c:\\Users\\yonta\\Downloads\\postgresql-42.5.1.jar"
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
+}

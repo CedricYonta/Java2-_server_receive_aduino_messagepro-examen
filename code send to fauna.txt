@@ -1,0 +1,52 @@
+import static com.faunadb.client.query.Language.*;
+import static com.faunadb.client.query.Language.TimeUnit.*;
+import static com.faunadb.client.types.Codec.*;
+import static com.faunadb.client.types.Value.NullV.NULL;
+
+import com.faunadb.client.FaunaClient;
+import com.faunadb.client.query.*;
+import com.faunadb.client.types.*;
+import com.faunadb.client.types.Value.*;
+
+import java.util.*;
+
+import javax.xml.crypto.Data;
+
+public class App {
+    public static void main(String[] args) throws Exception {
+        // Acquire the secret and optional endpoint from environment variables
+        String secret = System.getenv("fnAFAOruSTAAUMxoS6Zw8P5jzaFaUw4DKnV8j60x");
+        String endpoint = System.getenv("https://db.fauna.com/");
+
+        if (secret == null || secret.isEmpty()) {
+            System.out.println("The FAUNADB_SECRET environment variable is not set, exiting.");
+            System.exit(1);
+        }
+
+        if (endpoint == null || endpoint.isEmpty()) {
+            endpoint = "https://db.fauna.com/";
+        }
+
+        // Instantiate a client
+        FaunaClient client = FaunaClient.builder()
+                .withSecret("fnAFAOruSTAAUMxoS6Zw8P5jzaFaUw4DKnV8j60x")
+                .withEndpoint("https://db.fauna.com/")
+                .build();
+
+         
+          // Create a data object to be inserted
+          Map<String, Object> data = new HashMap<>();
+          data.put("userName", "John Doe");
+          data.put("pulseRate", 90);
+          data.put("timestamp", Now());
+
+        // Create a new document in the "healthdata_personal" collection
+                client.query(
+                        Create(
+                                Collection("healthdata_personal"),
+                                Obj("data",Value(data))
+                        )
+                ).get();
+        
+    }
+}
